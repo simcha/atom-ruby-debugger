@@ -45,7 +45,11 @@ class Client
         line = parseInt(command.breakpoint.attrs.line) - 1 # zero-indexed
         atom.workspace.open(file, initialLine: line)
           .then (editor) -> console.log(editor)
-      # case 'suspended'           then
+      when 'suspended'
+        file = command.suspended.attrs.file
+        line = parseInt(command.suspended.attrs.line) - 1 # zero-indexed
+        atom.workspace.open(file, initialLine: line)
+
       # case 'exception'           then
       # case 'breakpointAdded'     then
       # case 'catchpointSet'       then
@@ -69,6 +73,10 @@ class Client
   addBrakepoint: (brakepoint)->
     brkString = brakepoint.scriptUrl + ":" + + brakepoint.lineNumber
     @runCmd("break", brkString)
+  stepOver: ->
+    @runCmd("next")
+  stepInto: ->
+    @runCmd("step")
   # Tear down any state and detach
   destroy: ->
     # TODO: stop the debugger when closing project/editor & other events (which?). this method seems to only be run on Atom exit?

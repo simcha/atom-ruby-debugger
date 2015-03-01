@@ -34,7 +34,6 @@ class RubyDebugger
     scriptUrl = model.getURI()
     lineNumber = 1 + model.getCursorScreenPosition().row
     @client.addBrakepoint({scriptUrl, lineNumber})
-    # @debugger.toggleBreakpoint({lineNumber, scriptUrl})
     #   .done =>
     #     debug('toggled breakpoint')
     #     @updateMarkers()

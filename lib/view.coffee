@@ -2,12 +2,12 @@ module.exports =
 class View
   constructor: (serializeState, client) ->
     @client = client
-    
+
     breakpoints = [
       "/Users/johan_lunds/Documents/Kod/apoex2/app/controllers/care/authentication_controller.rb:18"
       "/Users/johan_lunds/Documents/Kod/apoex2/app/controllers/care/authentication_controller.rb:35"
     ]
-    
+
     # Create root element
     @element = document.createElement('div')
     @element.classList.add('ruby-debugger')
@@ -18,7 +18,7 @@ class View
     message.addEventListener 'click', => @client.connect()
     # message.classList.add('message')
     @element.appendChild(message)
-    
+
     ["info break", "start", "exit", "interrupt", "cont"].forEach (cmd) =>
       # Create message element
       message = document.createElement('button')
@@ -26,6 +26,15 @@ class View
       message.addEventListener 'click', => @client.runCmd(cmd)
       # message.classList.add('message')
       @element.appendChild(message)
+    message = document.createElement('button')
+    message.textContent = "StepOver"
+    message.addEventListener 'click', => @client.stepOver()
+    @element.appendChild(message)
+
+    message = document.createElement('button')
+    message.textContent = "StepInto"
+    message.addEventListener 'click', => @client.stepInto()
+    @element.appendChild(message)
 
     cmd = "break"
     # Create message element

@@ -3,7 +3,7 @@ sax = require 'sax'
 
 # Implement custom streaming XML-parser that
 # supports multiple root elements.
-module.exports = 
+module.exports =
 class XmlParser
 
   constructor: () ->
@@ -12,7 +12,7 @@ class XmlParser
     options = { trim: true }
     stack = []
     @parser = sax.parser(strict, options)
-    
+
     @parser.onerror = (e) ->
       # an error happened.
       throw e
@@ -21,7 +21,7 @@ class XmlParser
     @parser.onend = ->
       # parser stream is done, and ready to have more stuff written to it.
       return
-    
+
     @parser.ontext = (text) ->
       # got some text.  t is the string of text.
       node = stack[stack.length - 1]
@@ -44,25 +44,26 @@ class XmlParser
       object.text = node.text if node.text
       result[node.name] = object
       if stack.length == 1
-        @events.emit 'command', result
+        try
+          @events.emit 'command', result
+        catch e
+          console.error e
       else
         parent = stack[stack.length - 1]
         parent.children ?= []
         parent.children.push(result)
       return
-    
+
     # add fake root that is never closed, otherwise the SAX parser will set its internal value
     # 'closedRoot' and throw errors
     @parser.write("<root>")
 
   write: (text) ->
     @parser.write(text)
-  
+
   # Supported events:
   #
   # * "command"
   #
   on: (event, cb) ->
     @events.on event, cb
-    
-    
