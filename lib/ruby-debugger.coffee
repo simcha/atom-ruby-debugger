@@ -14,12 +14,11 @@ class RubyDebugger
 
     # Register command that toggles this view
     @subscriptions.add atom.commands.add 'atom-workspace', 'ruby-debugger:toggle': => @toggle()
-
-  destroy: ->
-    @panel.destroy()
-    @subscriptions.dispose()
-    @view.destroy()
-    @client.destroy()
+    @subscriptions.add atom.commands.add '.editor', 'ruby-debugger:breakpoint-toggle': @breakpointToggleAtCurrentLine
+    # @panel.destroy()
+    # @subscriptions.dispose()
+    # @view.destroy()
+    # @client.destroy()
 
   serialize: ->
     viewState: @view.serialize()
@@ -29,3 +28,14 @@ class RubyDebugger
       @panel.hide()
     else
       @panel.show()
+  #thanks to https://github.com/anandthakker/atom-node-debug
+  breakpointToggleAtCurrentLine: (event)=>
+    model = event.currentTarget.getModel()
+    scriptUrl = model.getURI()
+    lineNumber = 1 + model.getCursorScreenPosition().row
+    @client.addBrakepoint({scriptUrl, lineNumber})
+    # @debugger.toggleBreakpoint({lineNumber, scriptUrl})
+    #   .done =>
+    #     debug('toggled breakpoint')
+    #     @updateMarkers()
+    #   , (error) -> debug(error)
