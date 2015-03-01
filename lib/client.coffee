@@ -77,6 +77,9 @@ class Client
     @runCmd("next")
   stepInto: ->
     @runCmd("step")
+  stepOut: ->
+    @runCmd("finish")
+
   # Tear down any state and detach
   destroy: ->
     # TODO: stop the debugger when closing project/editor & other events (which?). this method seems to only be run on Atom exit?

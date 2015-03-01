@@ -36,6 +36,11 @@ class View
     message.addEventListener 'click', => @client.stepInto()
     @element.appendChild(message)
 
+    message = document.createElement('button')
+    message.textContent = "StepOut"
+    message.addEventListener 'click', => @client.stepOut()
+    @element.appendChild(message)
+
     cmd = "break"
     # Create message element
     message = document.createElement('button')
